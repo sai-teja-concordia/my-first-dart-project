@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
           title: const Center(
               child: Text(
             'Personal Space',
+            style: TextStyle(fontWeight: FontWeight.bold),
           )),
         ),
         body: const Center(child: Text("Bonjour Hi.")),

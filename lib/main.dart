@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_dart_project/ProfileScreen.dart';
+import 'package:my_first_dart_project/TicTacToe.dart';
 import 'package:my_first_dart_project/games.dart';
 import 'package:my_first_dart_project/home.dart';
 
@@ -22,6 +23,7 @@ class _MainAppState extends State<MainApp> {
     Widget widget = Container(); // default
     switch (currentPageIndex) {
       case 0:
+        // ignore: avoid_print
         print("widget 1 selected");
         widget = const HomeScreen();
         break;
@@ -29,32 +31,34 @@ class _MainAppState extends State<MainApp> {
         widget = GamesScreen();
         break;
       case 2:
-        widget = const ProfileScreen();
+        widget = const ProfileState();
         break;
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: widget,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: currentPageIndex,
-          destinations: const [
-            NavigationDestination(
-                label: 'Home',
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home)),
-            NavigationDestination(
-              label: 'Games',
-              icon: Icon(Icons.videogame_asset_outlined),
-              selectedIcon: Icon(Icons.videogame_asset),
+        bottomNavigationBar: BottomNavigationBar(
+          enableFeedback: true,
+          selectedFontSize: 10,
+          currentIndex: currentPageIndex,
+          items: const [
+            BottomNavigationBarItem(
+                label: '',
+                icon: Icon(color: Colors.black, size: 45, Icons.home_outlined),
+                activeIcon: Icon(color: Colors.cyan, size: 45, Icons.home) ),
+            BottomNavigationBarItem(
+              label: '',
+              icon: Icon(color: Colors.black, size: 45, Icons.videogame_asset_outlined),
+              activeIcon: Icon(color: Colors.cyan, size: 45, Icons.videogame_asset),
             ),
-            NavigationDestination(
-              label: 'Profile',
-              icon: Icon(Icons.person_2_outlined),
-              selectedIcon: Icon(Icons.person_2),
+            BottomNavigationBarItem(
+              label: '',
+              icon: Icon(color: Colors.black, size: 45, Icons.person_2_outlined),
+              activeIcon: Icon(color: Colors.cyan, size: 45, Icons.person_2),
             ),
           ],
-          onDestinationSelected: (int tappedIndex) {
+          onTap: (int tappedIndex) {
             setState(() {
               currentPageIndex = tappedIndex;
             });
