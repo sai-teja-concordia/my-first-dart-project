@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_dart_project/PlayChainReaction.dart';
 
-class ChainReaction extends StatelessWidget {
+class ChainReaction extends StatefulWidget {
   const ChainReaction({super.key});
+
+  @override
+  State<ChainReaction> createState() => ChainReactionState();
+}
+
+class ChainReactionState extends State<ChainReaction> {
+  int numberOfPlayers = 2;
+
+  void changeDropDownValue(int? selectedValue) {
+    if (selectedValue is int) {
+      setState(() {
+        numberOfPlayers = selectedValue;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +27,51 @@ class ChainReaction extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              Container(
-                child: const Text("Rules"),
-              )
+              ElevatedButton(
+                  onPressed: () => print("Pressed"),
+                  style: const ButtonStyle(
+                      backgroundColor:
+                          MaterialStatePropertyAll<Color>(Colors.cyan),
+                      fixedSize: MaterialStatePropertyAll<Size>(Size(70, 30))),
+                  child: const Text("Rules"))
             ],
           ),
         )
+      ]),
+    );
+
+    Widget playerSelector = Container(
+      padding: const EdgeInsets.only(left: 30, bottom: 0, top: 0),
+      child: Row(children: [
+        Expanded(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: DropdownButton(
+                  style: const TextStyle(color: Colors.cyan),
+                  onChanged: changeDropDownValue,
+                  value: numberOfPlayers,
+                  iconEnabledColor: Colors.cyan,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 2,
+                      child: Text("2 players"),
+                    ),
+                    DropdownMenuItem(
+                      value: 3,
+                      child: Text("3 players"),
+                    ),
+                    DropdownMenuItem(
+                      value: 4,
+                      child: Text("4 players"),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ]),
     );
 
@@ -26,15 +81,22 @@ class ChainReaction extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              Container(
-                child: const Text("Coming Soon"),
+              ElevatedButton(
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.cyan),
+                    fixedSize: MaterialStatePropertyAll<Size>(Size(70, 30))),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayChainReaction(numberOfPlayers: numberOfPlayers))),
+                child: const Text("Play"),
               )
             ],
           ),
         )
       ]),
     );
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.cyan,
@@ -54,8 +116,8 @@ class ChainReaction extends StatelessWidget {
                   height: 370,
                   fit: BoxFit.fitHeight,
                 )),
-            // Text("Coming Soon")
-            // rulesWidget,
+            rulesWidget,
+            playerSelector,
             playWidget
           ],
         ));
