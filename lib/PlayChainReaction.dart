@@ -10,12 +10,12 @@ class PlayChainReaction extends StatefulWidget {
 }
 
 class PlayChainReactionState extends State<PlayChainReaction> {
-  static const lightSource = Offset(0.9, -0.9);
+  static const lightSource = Offset(0.75, -0.75);
   static int currentPlayer = 0;
-  static Color firstPlayerColor = Colors.green;
-  static Color secondPlayerColor = Colors.red;
-  static Color thirdPlayerColor = Colors.yellow;
-  static Color fourthPlayerColor = Colors.blue;
+  static const Color firstPlayerColor = Colors.green;
+  static const Color secondPlayerColor = Colors.red;
+  static const Color thirdPlayerColor = Color(0xFFFAE403);
+  static const Color fourthPlayerColor = Colors.blue;
 
   static const int columns = 6;
   static const int rows = 10;
@@ -47,12 +47,93 @@ class PlayChainReactionState extends State<PlayChainReaction> {
     currentPlayer = 0;
   }
 
+  Widget buildStackedAtoms(Color atomColor, int currentAtoms) {
+    if (currentAtoms == 2) {
+      return SizedBox(
+        // padding: const EdgeInsets.all(8.0),
+        height: 40.0,
+        width: 40.0,
+        //
+        // alignment: FractionalOffset.center,
+        child: Stack(
+          //alignment:new Alignment(x, y)
+          children: <Widget>[
+            buildAtom(atomColor),
+            Positioned(
+              left: 15.0,
+              child: buildAtom(atomColor),
+            )
+          ],
+        ),
+      );
+    } else if (currentAtoms == 3) {
+      return SizedBox(
+        // padding: const EdgeInsets.all(8.0),
+        height: 40.0,
+        width: 40.0,
+        //
+        // alignment: FractionalOffset.center,
+        child: Stack(
+          //alignment:new Alignment(x, y)
+          children: <Widget>[
+            buildAtom(atomColor),
+            Positioned(
+              left: 15.0,
+              child: buildAtom(atomColor),
+            ),
+            Positioned(
+              left: 7.5,
+              top: 15.0,
+              child: buildAtom(atomColor),
+            )
+          ],
+        ),
+      );
+    } else if (currentAtoms == 4) {
+      return SizedBox(
+        // padding: const EdgeInsets.all(8.0),
+        height: 40.0,
+        width: 40.0,
+        //
+        // alignment: FractionalOffset.center,
+        child: Stack(
+          //alignment:new Alignment(x, y)
+          children: <Widget>[
+            buildAtom(atomColor),
+            Positioned(
+              left: 15.0,
+              child: buildAtom(atomColor),
+            ),
+            Positioned(
+              left: 15.0,
+              top: 15.0,
+              child: buildAtom(atomColor),
+            ),
+            Positioned(
+              top: 15.0,
+              child: buildAtom(atomColor),
+            )
+          ],
+        ),
+      );
+    }
+    return buildAtom(atomColor);
+  }
+
   Widget buildAtom(Color atomColor) {
     return Container(
       width: 25,
       height: 25,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
+          // borderRadius: BorderRadius.circular(25.0),
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 1.0,
+              offset: Offset(0.5, 0.5),
+              color: Colors.black,
+            )
+          ],
           color: atomColor,
           gradient: RadialGradient(
               center: Alignment(lightSource.dx, lightSource.dy),
@@ -168,6 +249,22 @@ class PlayChainReactionState extends State<PlayChainReaction> {
     if (displayGrid[x][y] != -1 && displayGrid[x][y] != currentPlayer) {
       return;
     }
+    if ((x == 0 && y == 0) || (x == 0 && y == columns-1) || (x == rows-1 && y == 0) || (x == rows-1 && y == columns-1)) {
+      if (numberOfAtoms[x][y] >= 2){
+        print ("Maximum atoms reached for the position");
+        return;
+      }
+    } else if (x== 0 || y==0 || x == rows-1 || y == columns-1 ){
+      if (numberOfAtoms[x][y] >= 3){
+        print ("Maximum atoms reached for the position");
+        return;
+      }
+    } else {
+      if (numberOfAtoms[x][y] >=4){
+        print ("Maximum atoms reached for the position");
+        return;
+      }
+    }
     setState(() {
       displayGrid[x][y] = currentPlayer;
       numberOfAtoms[x][y]++;
@@ -188,13 +285,13 @@ class PlayChainReactionState extends State<PlayChainReaction> {
       case -1:
         return const Text('');
       case 0:
-        return buildAtom(firstPlayerColor);
+        return buildStackedAtoms(firstPlayerColor, numberOfAtoms[x][y]);
       case 1:
-        return buildAtom(secondPlayerColor);
+        return buildStackedAtoms(secondPlayerColor, numberOfAtoms[x][y]);
       case 2:
-        return buildAtom(thirdPlayerColor);
+        return buildStackedAtoms(thirdPlayerColor, numberOfAtoms[x][y]);
       case 3:
-        return buildAtom(fourthPlayerColor);
+        return buildStackedAtoms(fourthPlayerColor, numberOfAtoms[x][y]);
       default:
         return const Text('');
     }
